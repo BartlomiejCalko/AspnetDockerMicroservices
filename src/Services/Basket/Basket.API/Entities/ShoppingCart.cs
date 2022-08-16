@@ -16,7 +16,6 @@ namespace Basket.API.Entities
             UserName = userName;    
         }
 
-
         public decimal TotalPrice {
             get
             {
