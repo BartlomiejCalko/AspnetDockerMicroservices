@@ -5,6 +5,7 @@ using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
+using Discount.Grpc.Entities;
 
 namespace Discount.Grpc.Services
 {
@@ -34,11 +35,36 @@ namespace Discount.Grpc.Services
             return couponModel;
         }
 
-        public override Task<CouponModel> CreateDiscount(CreateDiscountRequest request, ServerCallContext context)
+        public override async Task<CouponModel> CreateDiscount(CreateDiscountRequest request, ServerCallContext context)
         {
             var coupon = _mapper.Map<Coupon>(request.Coupon);
+            await _repository.CreateDiscount(coupon);
 
-            
+            _logger.LogInformation("Discount created. ProductName: {ProductName}", coupon.ProductName);
+
+            var couponModel = _mapper.Map<CouponModel>(coupon);
+            return couponModel;
+        }
+
+        public override async Task<CouponModel> UpdateDiscount(UpdateDiscountRequest request, ServerCallContext context)
+        {
+            var coupon = _mapper.Map<Coupon>(request.Coupon);
+            await _repository.UpdateDiscount(coupon);
+
+            _logger.LogInformation("Discount was succesfuly updated for productName: {ProductName}", coupon.ProductName);
+
+            var couponModel = _mapper.Map<CouponModel>(coupon);
+            return couponModel;
+        }
+
+        public async Task<DeleteDiscountResponse> DeleteDiscount(DeleteDiscountRequest request, ServerCallContext context)
+        {
+            var deleted_coupon = await _repository.DeleteDiscount(request.ProductName);
+            var response = new DeleteDiscountResponse
+            {
+                Success = deleted_coupon 
+            };
+            return response;
         }
 
 
