@@ -9,17 +9,15 @@ namespace Ordering.Application.Features.Orders.Commands.UpdateOrder
             RuleFor(p => p.UserName)
                 .NotEmpty().WithMessage("{UserName} is required")
                 .NotNull()
-                .MaximumLength(50).WithMessage("{UserName} should not exceed more than 50 characters");
+                .MaximumLength(50).WithMessage("Name {UserName} should not exceed 50 characters");
 
             RuleFor(p => p.EmailAddress)
                 .NotEmpty().WithMessage("{EmailAddress} is required");
 
             RuleFor(p => p.TotalPrice)
                 .NotEmpty().WithMessage("{TotalPrice} is required")
-                .GreaterThan(0).WithMessage("{TotalPrice} should be greater than zero");
+                .GreaterThan(0).WithMessage("{TotalPrice} should be grater than zero");
 
         }
-
-
     }
 }
